@@ -43,9 +43,21 @@ Object.assign(EXERCISES,{"crunch": {"name": "Floor crunch", "group": "Core", "eq
 
 EXERCISES.deadbug.bodyweight=true;
 EXERCISES.deadbug.alternatives=['crunch','reversecrunch'];
-DAYS.a.slots.find(s=>s.id==='a-extra').options=['deadbug','crunch','reversecrunch','machinecrunch','preacher'];
-DAYS.b.slots.push(slot('b-core',2,['crunch','reversecrunch','deadbug','machinecrunch'],true));
-DAYS.b.reduced.push('b-core');
-DAYS.c.slots.find(s=>s.id==='c-curl').options=['reversecrunch','crunch','deadbug','machinecrunch','hammer','cablecurl'];
-DAYS.c.desc='Legs, back and chest, then a core slot and triceps. Swap the core slot for a curl if preferred.';
-DAYS.d.slots.find(s=>s.id==='d-extra').options.push('crunch','reversecrunch');
+
+// Keep established strength slot IDs so saved logs remain attached to each exercise.
+const take=(day,id)=>DAYS[day].slots.find(s=>s.id===id);
+const coreSlot=(id,sets,options,defaultActive=false)=>({...slot(id,sets,options,true),coreSlot:true,defaultActive});
+DAYS.a.slots=[take('a','a-row'),take('a','a-pull'),take('a','a-leg1'),take('a','a-leg2'),take('a','a-curl1'),take('a','a-curl2'),coreSlot('a-core1',2,['deadbug','crunch','reversecrunch','machinecrunch'],true),coreSlot('a-core2',1,['reversecrunch','crunch','machinecrunch'])];
+DAYS.b.slots=[take('b','b-press'),take('b','b-chest2'),take('b','b-leg1'),take('b','b-leg2'),take('b','b-tri1'),take('b','b-tri2'),coreSlot('b-core1',2,['crunch','machinecrunch','reversecrunch','deadbug'],true),coreSlot('b-core2',1,['deadbug','reversecrunch'])];
+DAYS.c.slots=[take('c','c-leg1'),take('c','c-row'),take('c','c-press'),take('c','c-leg2'),take('c','c-curl'),take('c','c-tri'),coreSlot('c-core1',2,['reversecrunch','crunch','machinecrunch','deadbug'],true),coreSlot('c-core2',1,['deadbug','crunch'])];
+DAYS.c.slots.find(s=>s.id==='c-curl').options=['hammer','cablecurl'];
+DAYS.d.slots=[take('d','d-cardio'),take('d','d-extra'),coreSlot('d-core1',1,['deadbug','crunch','reversecrunch']),coreSlot('d-core2',1,['crunch','reversecrunch'])];
+DAYS.d.slots.find(s=>s.id==='d-extra').options=['calf','bridge','abduction'];
+DAYS.a.reduced=['a-leg1','a-leg2','a-core1','a-core2'];
+DAYS.b.reduced=['b-leg1','b-leg2','b-core1','b-core2'];
+DAYS.c.reduced=['c-leg1','c-leg2','c-core1','c-core2'];
+DAYS.d.reduced=['d-cardio','d-extra','d-core1','d-core2'];
+DAYS.a.desc='Back first, then legs, biceps and core. Keep the larger movements ahead of curls.';
+DAYS.b.desc='Chest first, then legs, triceps and core. A leg-press swap stays ahead of arm isolation work.';
+DAYS.c.desc='Leg press, back and chest before isolation work; core finishes the session. A Romanian-deadlift swap moves up automatically.';
+DAYS.d.desc='Easy cardio, optional accessory and optional easy core. Skip core if you trained it hard the previous day.';
